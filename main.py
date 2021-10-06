@@ -5,6 +5,7 @@ import json
 import operator
 import schedule
 import time
+import datetime
 
 # Tweepy Credentials
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
@@ -33,7 +34,12 @@ def tweeter():
 
   top_three = sorted(data, key=operator.itemgetter(-1))[-3:]
 
-  api.update_status("Los Cedears que mejor performaron hoy fueron {} {}, {} {} y {} {}".format(top_three[0][1],top_three[0][3],top_three[1][1],top_three[1][3],top_three[2][1],top_three[2][3]))
+  # number of day of the week
+  weekno = datetime.datetime.today().weekday()
+
+  # si es dia de semana twitea
+  if weekno < 5:
+    api.update_status("Los Cedears que mejor performaron hoy fueron {} {}, {} {} y {} {}. Tweet automático del bot de cedears.ar cedears.ar".format(top_three[2][1],top_three[2][3],top_three[1][1],top_three[1][3],top_three[0][1],top_three[0][3]))
 
 schedule.every().day.at("21:00").do(tweeter)
 
